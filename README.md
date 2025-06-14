@@ -1,6 +1,6 @@
 # ConvoHub – A Student Collaboration Platform
 
-![ConvoHub Preview](https://raw.githubusercontent.com/yourusername/yourrepo/main/convohub-preview.png)
+![ConvoHub Preview](https://github.com/asnaatif/ConvoHub/blob/main/ConvoHub.png?raw=true)
 
 ## 📌 Overview
 
