@@ -2,52 +2,147 @@
 
 ![ConvoHub Preview](https://github.com/asnaatif/ConvoHub/blob/main/ConvoHub.png?raw=true)
 
-## 📑 Table of Contents
-1. [Overview](#-overview)
-2. [Key Features](#-key-features)
-3. [Tech Stack](#-tech-stack)
-4. [Project Structure](#-project-structure)
-5. [Design](#-design)
-6. [Setup & Run & Configuration](#-setup--run--configuration)
-
-## 📌 Overview
-
-**ConvoHub** is a web-based platform built for university students to support
-course-specific academic collaboration. 
-
-It enables students to participate in structured discussion groups, exchange
-learning resources, and communicate in real time, all within a centralized,
-course-focused environment. The platform also allows students to share
-feedback and insights about instructors to help peers make informed academic
-decisions.
-
-The goal of ConvoHub is to simplify peer-to-peer learning and improve access to
-reliable, course-specific information.
-
----
-## ✨ Key Features
-- Join course-based discussion groups
-- Share academic resources, tips, and study strategies
-- Provide and view instructor feedback and ratings
-- Communicate via real-time chat using WebSockets
-- Create and join public or private chat groups
-- Customize student profiles
----
-
-
-## 🛠 Tech Stack
-
-- **Frontend**: React.js
-- **Backend**: Django
-- **Real-Time Communication**: WebSockets (Django Channels)
-- **Database**: PostgreSQL
-- **Authentication**: Django Auth
-- **UI Design**: Figma (Designs uploaded)
+## Table of Contents
+1. [Overview](#overview)
+2. [Key Features](#key-features)
+3. [Tech Stack](#tech-stack)
+4. [Architecture and WebSockets](#architecture-and-websockets)
+5. [Design](#design)
+6. [Manual Setup](#manual-setup)
+7. [Configuration](#configuration)  
+8. [Project Structure](#project-structure)  
 
 ---
 
-## 📁 Project Structure
+## Overview
+ConvoHub is a web-based platform designed for university students to collaborate within course-specific spaces. It allows students to share resources, communicate in real time, and provide feedback on courses and instructors, all within a centralized and structured environment.
 
+---
+
+## Key Features
+- Course-based discussion groups  
+- Resource sharing and file attachments  
+- Instructor feedback and ratings  
+- Real-time chat using WebSockets (Django Channels)  
+- Public and private groups  
+- Student profiles with basic moderation tools  
+
+---
+
+## Tech Stack
+- Frontend: React.js (Vite)  
+- Backend: Django + Django REST Framework  
+- Real-Time Communication: Django Channels, WebSockets  
+- Database: PostgreSQL  
+- Authentication: Django Authentication (token/session based)  
+- UI/Design: Figma  
+
+---
+
+## Architecture and WebSockets
+High-level architecture:
+- Frontend ↔ Backend: REST APIs for courses, posts, users, and resources  
+- Frontend ↔ Backend: WebSocket connections for real-time chat and presence updates  
+
+Django Channels is used on the backend to manage WebSocket connections, enabling real-time messaging alongside traditional HTTP-based APIs.
+
+---
+## Design
+
+The interface for ConvoHub was planned and visualized in Figma
+to ensure clear user flows, layout consistency, and intuitive interactions prior to
+development.
+
+📄 **View the Figma design (PDF):**
+[Convohub Figma Design.pdf](Convohub%20Figma%20Design.pdf)
+
+---
+## Manual Setup
+
+### Prerequisites
+- Python 3.10+ (3.12 recommended)  
+- Node.js and npm  
+- PostgreSQL  
+- Git  
+
+Clone the repositories and proceed with the following steps:
+### Backend Setup
+
+1. Navigate to the backend directory
+```bash
+   cd convohubBackend
+```
+2. Install Python (3.12 recommended)  
+```bash
+   brew install python@3.12
+```
+3. Create and activate a virtual environment  
+```bash python3.12 -m venv env  
+   source env/bin/activate
+```
+
+4. Install backend dependencies  
+```bash
+   pip install -r requirements.txt
+```
+5. Create the PostgreSQL database  
+```bash
+   createdb convohub
+   psql -U postgres -c "CREATE DATABASE convohub;" //using psql
+```
+6. Import the database schema  
+```bash
+   psql -h localhost -p 5432 -U postgres -d convohub -f convohub.sql
+```
+7. Navigate into the backend project folder
+```bash
+   cd backend
+```
+8. Create and activate another virtual environment (if required)
+```bash
+   python3.12 -m venv env  
+   source env/bin/activate
+```
+9. Apply migrations and start the development server
+```bash
+   python manage.py makemigrations  
+   python manage.py migrate  
+   python manage.py runserver
+```
+---
+
+### Frontend Setup
+
+1. Navigate to the frontend directory
+```bash 
+   cd ../convohubFrontend/ConvoHub
+```
+2. Install frontend dependencies
+```bash
+   npm install
+```
+3. Run the development server
+```bash
+   npm run dev
+```
+4. If any vulnerabilities are reported
+```bash
+   npm audit fix
+```
+---
+
+## Configuration 
+Create a .env file inside convohubBackend/ (or project root, depending on settings) with the following variables:
+
+DATABASE_URL=postgres://postgres:password@localhost:5432/convohub  
+SECRET_KEY=your_django_secret_key  
+DEBUG=True
+
+Ensure Django is configured to load environment variables correctly.
+
+---
+
+## Project Structure
 ```bash
 ConvoHub/
 ├── convohubBackend/             # Django backend
@@ -58,98 +153,3 @@ ConvoHub/
 ├── ConvoHub Figma Design.pdf/   # Figma design
 ├── README.md
 ```
----
-## 🎨 Design
-
-The interface for ConvoHub was planned and visualized in Figma
-to ensure clear user flows, layout consistency, and intuitive interactions prior to
-development.
-
-📄 **View the Figma design (PDF):**
-[Convohub Figma Design.pdf](Convohub%20Figma%20Design.pdf)
-
----
-## ⚙️ Setup & Run & Configuration
-
-Follow the steps below to get ConvoHub running locally. All commands are listed exactly as used.
-
-```bash
-# ------------------------
-# Prerequisites
-# ------------------------
-# Python >= 3.10 (recommended 3.12)
-# Node.js and npm
-# PostgreSQL
-# Git
-
-# ------------------------
-# Initial Setup:
-# ------------------------
-# Clone the repository and navigate to the folder
-cd ConvoHub
-
-# ------------------------
-# Backend Setup
-# ------------------------
-cd /ConvoHub/convohubBackend
-
-# Install Python >= 3.10 (recommended 3.12)
-# Example using Homebrew:
-brew install python@3.12
-
-# Check version
-python3 --version
-# Use 3.12 in environment commands
-
-# Create virtual environment
-python3.12 -m venv env
-
-# Activate environment
-source env/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Create PostgreSQL database in pgAdmin named 'convohub'
-
-# Load initial database schema
-psql -h localhost -p 5432 -U postgres -d convohub -f convohub.sql
-
-cd backend
-
-# Create virtual environment again
-python3.12 -m venv env
-
-# Activate environment
-source env/bin/activate
-
-# Django migrations
-python manage.py makemigrations
-python manage.py migrate
-
-# Run backend server
-python manage.py runserver
-
-# ------------------------
-# Frontend Setup
-# ------------------------
-cd /ConvoHub/convohubFrontend/ConvoHub
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# If any vulnerabilities appear
-npm audit fix
-
-# ------------------------
-# Configuration
-# ------------------------
-# Create a .env file in the backend folder with required variables:
-
-# Example .env
-DATABASE_URL=postgres://postgres:your_password@localhost:5432/convohub
-SECRET_KEY=your_django_secret_key
-DEBUG=True
